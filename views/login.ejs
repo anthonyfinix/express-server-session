@@ -1,0 +1,34 @@
+<!-- <form action="/login" method="post">
+    <label for=""></label>
+    <input placeholder="username" type="text" name="username" required /></br>
+    <input placeholder="Password" type="text" name="password" required /></br>
+    <button type="submit">submit</button>
+    <a href="/register">register</a>
+</form> -->
+
+<div class="d-flex align-items-center">
+    <form class="form-signin" action="/login" method="post">
+        <% if(typeof error != 'undefined') { %>
+            <small><%=error%></small></br>
+            <%}%>
+        <h3 class="text-center">LOGIN</h3>
+        <div class="form-label-group">
+            <label for="inputEmail">Username</label>
+            <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
+        </div>
+    
+        <div class="form-label-group">
+            <label for="inputPassword">Password</label>
+            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+        </div>
+    
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <a class="btn btn btn-success btn-block" href="/register">Register</a>
+        <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2020</p>
+    </form>
+</div>

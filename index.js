@@ -1,33 +1,40 @@
 const path = require("path");
 const express = require("express");
+const session = require('express-session');
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 const app = express();
 const db = require("./db.js");
-const api = require("./routes/api");
-const test = require("./routes/test");
+const routes = require('./routes');
+const expressLayouts = require("express-ejs-layouts");
 const logIncomingReq = require("./utils/logIncomingRequest");
-const notFound = require("./utils/notfound");
-const errorHandle = require("./utils/errorHandle");
-const cors = require("cors");
-const handleToken = require('./routes/user/util/handleToken');
-const config = require('./config')
+const config = require("./config");
+const passport  = require('passport');
+const flash = require('connect-flash')
+
+const passportInitialize = require('./config/passport.config');
+passportInitialize(passport);
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({extended:false}));
 app.use(cookieParser());
-app.use(logIncomingReq);
-app.use(handleToken)
-app.use(express.static("public"));
-db.init().then(() => {
-  
-  app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
-  });
-  app.use("/api", api);
-  app.use('/test', test);
-  app.use(notFound);
-  app.use(errorHandle);
+app.use(session({
+  secret: 'SECRET',
+  resave: false,
+  saveUninitialized: false,
+}))
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(expressLayouts);
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
+app.use(express.static("public"));
+app.use(logIncomingReq);
+db.init().then(() => {
+  app.use(routes);
   app.listen(process.env.PORT || config.PORT, () => {
     console.log(`Express Listening at port ${config.PORT}`);
   });
