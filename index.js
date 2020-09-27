@@ -11,6 +11,7 @@ const logIncomingReq = require("./utils/logIncomingRequest");
 const config = require("./config");
 const passport  = require('passport');
 const flash = require('connect-flash')
+const youtubeIDSync = require('./utils/youtubeIDSync');
 
 const passportInitialize = require('./config/passport.config');
 passportInitialize(passport);
@@ -35,6 +36,7 @@ app.use(express.static("public"));
 app.use(logIncomingReq);
 db.init().then(() => {
   app.use(routes);
+  youtubeIDSync();
   app.listen(process.env.PORT || config.PORT, () => {
     console.log(`Express Listening at port ${config.PORT}`);
   });

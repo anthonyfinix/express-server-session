@@ -1,1 +1,2 @@
-module.exports.User = require('./user');
+exports.User = require('./user');
+exports.Recipe = require('./recipes');
